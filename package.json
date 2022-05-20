@@ -1,0 +1,26 @@
+{
+  "name": "modern-yandex-metrika",
+  "version": "1.0.0",
+  "description": "Yandex Metrika for modern frameworks like React, Vue, Svelte, etc.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodshtein/Modern-Yandex-Metrika.git"
+  },
+  "keywords": [
+    "Yandex",
+    "Metrika",
+    "Vue",
+    "React",
+    "Svelte"
+  ],
+  "author": "Misha Rodshtein",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rodshtein/Modern-Yandex-Metrika/issues"
+  },
+  "homepage": "https://github.com/rodshtein/Modern-Yandex-Metrika#readme"
+}
