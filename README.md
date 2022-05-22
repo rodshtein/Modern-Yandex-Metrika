@@ -5,15 +5,14 @@
 Yandex Metrika for modern frameworks like React, Vue, Svelte, etc.  
 
 ### Benefits
-👨‍💻   Prevent run on Dev Environment  
-🤖   Prevent run on server during SSR render  
-🚀   [3 Init strategy](#init-strategy) for better SEO metrics  
-😎   [Self hosted option](#init-strategy) for bypass blocks  
+👨‍💻   Dev environment support<br>
+🤖   SSR support<br>
+🚀   3 Init strategy by delay options for better SEO metrics<br>
+😎   Self hosted option for bypass blocks<br>
 ✨   Easy init:
-
 ```javascript
 import { initMetrika } from 'Modern-Yandex-Metrika'
-initMetrika({counter: 000111222});
+initMetrika(111222333);
 ```
 
 
@@ -69,34 +68,39 @@ initMetrika(params);
 - **delay**<br>
 ## Counter options
 Just pass counter id for default options:
-```javascript
-initMetrika({ counter: 000111222 });
-```
 
-Or more id's for several counters:
 ```javascript
-initMetrika({
-  counter: [ 000111222, 333444555 ]
-});
-```
+initMetrika(111222333);
 
-Or even pass additional options for 3 different counters:
-```javascript
-initMetrika({
-  counter: [
-    000111222,
-    { 
-      name: 1,
-      id: 333444555,
-      webvisor: true,
-    },
-    { 
-      name: 2,
-      id: 666777888,
-      defer: false,
-    },
-  ]
-});
+// Or more id's for several counters:
+
+initMetrika(111222333, 222333444);
+
+// Or even pass additional options:
+initMetrika(
+  111222333,
+  { 
+    name: 'dev',
+    id: 222333444,
+    webvisor: true,
+  }
+);
+
+// Or pass init options:
+initMetrika(
+  {
+    dev: isDev(),
+    delay: 3000,
+    counters: [
+      111111222,
+      { 
+        name: 'dev',
+        id: 222333444,
+        webvisor: true,
+      }
+    ]
+  }
+);
 ```
 
 ### Full list of available options
