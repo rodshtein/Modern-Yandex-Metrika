@@ -20,7 +20,7 @@ initMetrika({counter: 000111222});
 [Official Guides from Yandex](https://yandex.ru/support/metrica/index.html)
 
 
-## Init Metrika Public function
+## Init Metrika public function
 ### Optional
 
 It's official recommendation by Yandex[^1] but not necessary.  
@@ -32,7 +32,7 @@ Create `ym` function inside `<head>` tag of your main `html` template.
   ym.l = 1 * new Date();
 </script>
 ```
-### init Metrika Counter
+### Init counter
 Init script in your `Main Layout`, default options are presented:
 
 ```javascript
@@ -102,42 +102,42 @@ initMetrika({
 ### Full list of available options 
 *Default options are presented*  
 
-`id: number`  
+- `id: number`  
 Metrika counter id. You can find it [here in first column]('https://metrika.yandex.ru/list')  
 
-`name: number or string`  
+- `name: number or string`  
 Custom counter name. By this name you can call the counter in Methods of Yandex Metrika
 
-`accurateTrackBounce: true`  
-Register non-bounce event
-- `true`: non-bounce event registered after 15000 ms. 
-- `number`: non-bounce events are recorded after the ms. 
-- `false`: disable.
+- `accurateTrackBounce: true`  
+    Register non-bounce event
+    - `true`: non-bounce event registered after 15000 ms. 
+    - `number`: non-bounce events are recorded after the ms. 
+    - `false`: disable.
 
-`childIframe: false`  
+- `childIframe: false`  
 [Record iframe contents]('https://yandex.ru/support/metrica/webvisor-v2/iframe-support.html#iframe-support') without a tag in a child window
 
-`clickmap: false`  
+- `clickmap: false`  
 Collect data for a [Click map]('https://yandex.ru/support/metrica/behavior/click-map.html?lang=en')
 
-`defer: false`  
+- `defer: false`  
 Disable automatically sending data.  
 ⚠️ Danger zone: if is `true` you must trigger all events by yourself, or data will be empty
 
-`ecommerce: false`  
+- `ecommerce: false`  
 
-Collect data for Ecommerce.
+  Collect data for Ecommerce.
 
-- `true`: transmit data via global object: `window.dataLayer`.
-- `string`: custom name for global object.
-- `array`: transmit data in the array.
-- `false`: disable.
+  - `true`: transmit data via global object: `window.dataLayer`.
+  - `string`: custom name for global object.
+  - `array`: transmit data in the array.
+  - `false`: disable.
 
-`params: undefined`  
+- `params: undefined`  
 Transmit session params during initialization.  
 To transmit session parameters at any other time, use the [Params method](#params)
 
-`userParams: undefined`  
+- `userParams: undefined`  
 Transmit user params during initialization.  
 To transmit user parameters at any other time, use the [Params method](#params)
 
