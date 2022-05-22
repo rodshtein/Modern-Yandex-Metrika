@@ -52,21 +52,21 @@ let params = {
 initMetrika(params);
 ```
 
-## Metrika Options
+## Init options
 *Default options are presented*  
-
-`counter`  
-`dev`  
-### Hosting: `useCDN: false`
-- `true`: use official CDN.  
-- `url string`: It's better option for bypassing adBlock or Sanctions and Censors.
-Download last Metrika JS Library, rename, host on your side and pass url to 
-
-```javascript
-initMetrika({useCDN:'/static/metrika.js', counter:222333444});
-```
-`useCDN`  
-`delay`  
+- **counter**<br>
+- **dev**<br>
+- **useCDN: false**<br>
+  - `true`<br>
+  use the official CDN.
+  - `url string`<br>
+  It's better option for bypassing adBlock or Sanctions and Censors.<br>
+  Download last Metrika JS Library, rename, host on your side and pass url to:
+    ```javascript
+    initMetrika({useCDN:'/static/metrika.js', counter:222333444});
+    ```
+- **useCDN**<br>
+- **delay**<br>
 ## Counter options
 Just pass counter id for default options:
 ```javascript
@@ -99,45 +99,43 @@ initMetrika({
 });
 ```
 
-### Full list of available options 
-*Default options are presented*  
+### Full list of available options
+*Default options are presented*
 
-- `id: number`  
+- **id: number**<br>
 Metrika counter id. You can find it [here in first column]('https://metrika.yandex.ru/list')  
 
-- `name: number or string`  
+- **name: number or string**<br>
 Custom counter name. By this name you can call the counter in Methods of Yandex Metrika
 
-- `accurateTrackBounce: true`  
+- **accurateTrackBounce: true**<br>
     Register non-bounce event
     - `true`: non-bounce event registered after 15000 ms. 
     - `number`: non-bounce events are recorded after the ms. 
     - `false`: disable.
 
-- `childIframe: false`  
+- **childIframe: false**<br>
 [Record iframe contents]('https://yandex.ru/support/metrica/webvisor-v2/iframe-support.html#iframe-support') without a tag in a child window
 
-- `clickmap: false`  
+- **clickmap: false**<br>
 Collect data for a [Click map]('https://yandex.ru/support/metrica/behavior/click-map.html?lang=en')
 
-- `defer: false`  
+- **defer: false**<br>
 Disable automatically sending data.  
 ⚠️ Danger zone: if is `true` you must trigger all events by yourself, or data will be empty
 
-- `ecommerce: false`  
-
+- **ecommerce: false**<br>
   Collect data for Ecommerce.
-
   - `true`: transmit data via global object: `window.dataLayer`.
   - `string`: custom name for global object.
   - `array`: transmit data in the array.
   - `false`: disable.
 
-- `params: undefined`  
+- `params: undefined`<br>
 Transmit session params during initialization.  
 To transmit session parameters at any other time, use the [Params method](#params)
 
-- `userParams: undefined`  
+- `userParams: undefined`<br>
 Transmit user params during initialization.  
 To transmit user parameters at any other time, use the [Params method](#params)
 
