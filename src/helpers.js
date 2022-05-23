@@ -1,29 +1,29 @@
 export function optionsNormalize(args) {
-  let responseObj = {};
+  const responseObj = {};
+  const counters = {};
   let dev, useCDN, delay;
-  let counters = {};
 
-  let add_counters = (arr) =>
+  const addCounters = (arr) =>
     arr.forEach((el) => {
-      if (typeof el == 'number') counters[el] = { id: el };
-      if (typeof el == 'object') 'name' in el 
+      if (typeof el === 'number') counters[el] = { id: el };
+      if (typeof el === 'object') 'name' in el 
         ? (counters[el.name] = el) 
         : (counters[el] = el);
     });
 
   args.forEach((el) => {
-  if (typeof el == 'number') {
-    counters[el] = { id: el };
-  } else if (Array.isArray(el)) {
-    add_counters(el);
-  } else if (typeof el == 'object') {
-    if ('id' in el) {
-      'name' in el ? (counters[el.name] = el) : (counters[el] = el);
-    } else {
-      ({ dev, useCDN, delay } = el);
-      if (el.counters) add_counters(el.counters);
+    if (typeof el === 'number') {
+      counters[el] = { id: el };
+    } else if (Array.isArray(el)) {
+      addCounters(el);
+    } else if (typeof el === 'object') {
+      if ('id' in el) {
+        'name' in el ? (counters[el.name] = el) : (counters[el] = el);
+      } else {
+        ({ dev, useCDN, delay } = el);
+        if (el.counters) addCounters(el.counters);
+      }
     }
-  }
   });
 
   responseObj.counters = counters;
