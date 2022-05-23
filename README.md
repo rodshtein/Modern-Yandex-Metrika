@@ -38,10 +38,10 @@ Init script in your `Main Layout`, default options are presented:
 import { initMetrika } from 'Modern-Yandex-Metrika'
 
 let params = {
-  counter: {          // For more counters use an array: [{},{}] 
+  counters: [{        // For more counters use an array: [{},{}] 
     id: ['string'],
     ['rest options']  // See more on ##Counter options section
-  },
+  }],
   dev: false,         // Check for dev mode and prevent run if true
   scriptURL: ['url'], // You can use ##Self Hosting metrika script
   useCDN: false,      // Load metrika script from official CND 
@@ -125,8 +125,8 @@ Custom counter name. By this name you can call the counter in Methods of Yandex 
 Collect data for a [Click map]('https://yandex.ru/support/metrica/behavior/click-map.html?lang=en')
 
 - **defer: false**<br>
-Disable automatically sending data.  
-⚠️ Danger zone: if is `true` you must trigger all events by yourself, or data will be empty
+Disable automatically sending data to Metrika.  
+⚠️ Danger zone: if is `true` you must trigger all events by yourself, or app metrics will be empty.
 
 - **ecommerce: false**<br>
   Collect data for Ecommerce.
