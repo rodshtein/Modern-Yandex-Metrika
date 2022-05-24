@@ -1,6 +1,8 @@
-import { optionsNormalize, isBrowser} from "./helpers";
+import {optionsNormalize, isBrowser} from "./helpers";
+import info from "./informer";
+
 const urls = {
-  def: 'https://mc.yandex.ru/metrika/tag.js',
+  yandex: 'https://mc.yandex.ru/metrika/tag.js',
   cdn: 'https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js'
 }
 
@@ -10,30 +12,31 @@ const defaultOptions = {
   clickmap: false,
 };
 
-let dev = false;
-let useCDN = false;
-let delay = true;
-let counters = {};
+let dev, src, delay, counters, err, initStatus;
 
-export {initMetrika, initCounters, YMHit, YMGoal, YMParams };
+export {initMetrika, initCounters, YMHit, YMGoal, YMParams};
 
-async function initMetrika(...options){
-  ({ dev = false, useCDN = false, delay = true, counters = {} } = optionsNormalize(options))
+async function initMetrika (...options) {
+  // Skip init for SSR
+  if (!isBrowser() || Object.keys(counters).length) return
+    
+  ({
+    dev = false,
+    src = 'yandex', 
+    delay = true, 
+    counters = {},
+    err = false
+  } = optionsNormalize(options))
+  
+  if (dev) info('dev-mode')
 
-  if (!isBrowser() || dev || Object.keys(counters).length) return
-
-  let validOptions = counters.filter(item => item.id).length === counters.length;
-
-  if (!validOptions) {
-    console.error("[initYandexMetrika] Can't recognition YM ID's! Check options")
-    return
-  }
-
+  // Check for counters
+  if (err) {info(err); return}
 
   // init all
-  initMetrikaFunc()
+  initMetrikaFunction()
   initCounters(counters)
-  loadTagScript({delay, useCDN})
+  loadJsLibrary()
 
   return {
     hint: (from, to) => YMHit(from, to),
@@ -42,11 +45,8 @@ async function initMetrika(...options){
   }
 }
 
-
-
-function initMetrikaFunc(){
-
-  if (window.ym) return
+function initMetrikaFunction () {
+  if (!window.ym) return
   /**
    * Create Metrika public function
    * ----------------
@@ -62,7 +62,7 @@ function initMetrikaFunc(){
    *
    */
 
-  window.ym = function(){
+  window.ym = function () {
     (window.ym.a = window.ym.a || []).push(arguments)
   };
 
@@ -70,38 +70,38 @@ function initMetrikaFunc(){
   window.ym.l = 1 * new Date();
 }
 
-function initCounters(options){
-  // Add counters
-  // We can start collect data immediately
-  options.forEach(i => {
-    let {id, ...restOptions} = i;
-    window.ym(id, 'init', Object.assign(defaultOptions, restOptions))
-  });
+function initCounters () {
+  for (let key in counters) {
+    let {id, disable, ...options} = counters[key];
+    if (!disable) {
+      initStatus = true 
+      window.ym(id, 'init', Object.assign(defaultOptions,options))
+    }
+  }
 }
 
-function loadTagScript({delay, useCDN}={}){
+function loadJsLibrary () {
+  if (dev) return
+  if (!initStatus) {info('no-counters-error'); return}
   let script = document.createElement("script");
   script.async = true
-  script.src = getBaseUrl(useCDN)
+  script.src = src == 'yandex'  
+    ? urls.yandex
+    : src == 'cdn'  
+      ? urls.cdn
+      : src;
 
-  if (delay > 1){
-    window.onload = setTimeout(()=>{document.head.append(script)}, delay)
-  } else if (delay){
+  if (delay > 1) {
+    setTimeout(() => {document.head.append(script)}, delay)
+  } else if (delay) {
     window.onload = document.head.append(script);
   } else {
     document.head.append(script);
   }
 }
 
-function getBaseUrl(useCDN){
-  return typeof(useCDN) == 'string' 
-    ? useCDN
-    : useCDN 
-      ? urls.cdn
-      : urls.def;
-}
 
-function checkId(func, id) {
+function checkId (func, id) {
   if (dev) return
   if (!counters.includes(id)) {
     console.error(`[YMetrika][sendParams] The ${id} is not initiated`)
@@ -113,15 +113,19 @@ function checkId(func, id) {
 
 
 // ======== Methods ======== 
-
-function YMHit(from, to){
-  if (!from || !to || dev ) return
-  counters.forEach(({id}) => {
-    window.ym(id, 'hit', to, { referer: from });
-  })
+function YMHit (from, to, name) {
+  if (!from || !to) {info('hit-error', {from, to}); return}
+  if (dev) {info('hit', {from, to}); return}
+  if (name) { 
+    window.ym(counters[name].id, 'hit', to, {referer: from})
+  } else {
+    for (let key in counters) {
+      window.ym(counters[key].id, 'hit', to, {referer: from});
+    }
+  }
 }
 
-function YMGoal(options, id = false){
+function YMGoal (options, id = false) {
   // Check arguments
   if (dev) return
   if (!counters.length) {
@@ -137,23 +141,23 @@ function YMGoal(options, id = false){
   let target, params, callback, ctx;
 
   if (typeof target === 'object') {
-    ({ target, params, callback, ctx } = options)
+    ({target, params, callback, ctx} = options)
   } else {
     target = options;
   }
 
   if (id) {
-    checkId(window.ym(id, 'reachGoal', target, params, callback, ctx ), id);
+    checkId(window.ym(id, 'reachGoal', target, params, callback, ctx), id);
     return
   }
 
   counters.forEach(({id}) => {
-    window.ym(id, 'reachGoal', target, params, callback, ctx );
+    window.ym(id, 'reachGoal', target, params, callback, ctx);
   })
 }
 
 
-function YMParams(options, id=false){
+function YMParams (options, id=false) {
   // Check
   if (dev) return
   if (typeof options !== 'object' || options === null || !options) {
@@ -166,7 +170,7 @@ function YMParams(options, id=false){
   }
 
   // Logic
-  let { visitParams, goalParams } = options;
+  let {visitParams, goalParams} = options;
   visitParams = visitParams ? visitParams : options
 
   if (id) {
@@ -177,3 +181,8 @@ function YMParams(options, id=false){
     window.ym(id, 'params', options)
   })
 }
+
+
+/* eslint-disable spaced-comment */
+//! http://github.com/rodshtein/modern-yandex-metrika
+//! Made in Misha Rodstein, thanks for using ❤️ 

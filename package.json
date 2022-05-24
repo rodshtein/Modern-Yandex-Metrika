@@ -2,10 +2,12 @@
   "name": "modern-yandex-metrika",
   "version": "1.0.0",
   "description": "Yandex Metrika for modern frameworks like React, Vue, Svelte, etc.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+    "bild": "node esbuild.cjs"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
   },
   "homepage": "https://github.com/rodshtein/Modern-Yandex-Metrika#readme",
   "devDependencies": {
+    "esbuild": "^0.14.39",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",

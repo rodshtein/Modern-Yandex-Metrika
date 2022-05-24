@@ -20,8 +20,29 @@ initMetrika(111222333);
 
 
 ## Init Metrika public function
-### Optional
 
+Init script in your `Main Layout`, default options are presented:
+
+```javascript
+import { initMetrika } from 'Modern-Yandex-Metrika'
+
+let options = {
+  src: 'yandex',      // Metrika library source: yandex, cdn, yours
+  delay: true,        // Load Library: onLoad, timer, and immediately 
+  dev: false,         // Prevent load Library and send events in dev env
+  counters: [{        // Pass counter options via object: [{…},{…}] 
+    id: ['string'],
+    trackLinks : true,
+    accurateTrackBounce: true,
+    clickmap: false,
+    ['rest options']  // See more on ##Counter options
+  }],
+}
+
+initMetrika(options);
+```
+
+### Optional
 It's official recommendation by Yandex[^1] but not necessary.  
 Create `ym` function inside `<head>` tag of your main `html` template.
 
@@ -31,40 +52,29 @@ Create `ym` function inside `<head>` tag of your main `html` template.
   ym.l = 1 * new Date();
 </script>
 ```
-### Init counter
-Init script in your `Main Layout`, default options are presented:
-
-```javascript
-import { initMetrika } from 'Modern-Yandex-Metrika'
-
-let params = {
-  counters: [{        // For more counters use an array: [{},{}] 
-    id: ['string'],
-    ['rest options']  // See more on ##Counter options section
-  }],
-  dev: false,         // Check for dev mode and prevent run if true
-  scriptURL: ['url'], // You can use ##Self Hosting metrika script
-  useCDN: false,      // Load metrika script from official CND 
-  delay: true,        // Init strategy, see ##Init Strategy section 
-}
-
-initMetrika(params);
-```
 
 ## Init options
 *Default options are presented*  
-- **counter**<br>
-- **dev**<br>
-- **useCDN: false**<br>
-  - `true`<br>
-  use the official CDN.
+- **src**: 'yandex'<br>
+  - `yandex`<br>
+  Use default Metrika JS library url.
+  - `cdn`<br>
+  Use the official CDN.
   - `url string`<br>
   It's better option for bypassing adBlock or Sanctions and Censors.<br>
   Download last Metrika JS Library, rename, host on your side and pass url to:
     ```javascript
-    initMetrika({useCDN:'/static/metrika.js', counter:222333444});
+    initMetrika({src:'/static/metrika.js', counter:222333444});
     ```
-- **useCDN**<br>
+- **dev**: false<br>
+  In dev mode: 
+  - All counters will be disabled.
+  - JS Library will not be loaded.
+  But:
+  - All method will be works. 
+  - Methods will show results in console without send any data.
+  - You'll see all init and methods errors.
+- **counter**<br>
 - **delay**<br>
 ## Counter options
 Just pass counter id for default options:
@@ -89,11 +99,11 @@ initMetrika(
 // Or pass init options:
 initMetrika(
   {
-    dev: isDev(),
     delay: 3000,
     counters: [
       111111222,
-      { 
+      {
+        disable: isDev(), 
         name: 'dev',
         id: 222333444,
         webvisor: true,
@@ -106,45 +116,46 @@ initMetrika(
 ### Full list of available options
 *Default options are presented*
 
-- **id: number**<br>
+- **disable**: false<br>
+If all counters is activated, the Metrika JS Library will not be loaded.<br>
+💡 You can use this to separate dev and production Metrika accounts.
+
+- **id:** number<br>
 Metrika counter id. You can find it [here in first column]('https://metrika.yandex.ru/list')  
 
-- **name: number or string**<br>
+- **name**: number or string<br>
 Custom counter name. By this name you can call the counter in Methods of Yandex Metrika
 
-- **accurateTrackBounce: true**<br>
+- **accurateTrackBounce**: true<br>
     Register non-bounce event
     - `true`: non-bounce event registered after 15000 ms. 
     - `number`: non-bounce events are recorded after the ms. 
     - `false`: disable.
 
-- **childIframe: false**<br>
+- **childIframe**: false<br>
 [Record iframe contents]('https://yandex.ru/support/metrica/webvisor-v2/iframe-support.html#iframe-support') without a tag in a child window
 
-- **clickmap: false**<br>
+- **clickmap**: false<br>
 Collect data for a [Click map]('https://yandex.ru/support/metrica/behavior/click-map.html?lang=en')
 
-- **defer: false**<br>
+- **defer**: false<br>
 Disable automatically sending data to Metrika.  
 ⚠️ Danger zone: if is `true` you must trigger all events by yourself, or app metrics will be empty.
 
-- **ecommerce: false**<br>
+- **ecommerce**: false<br>
   Collect data for Ecommerce.
   - `true`: transmit data via global object: `window.dataLayer`.
   - `string`: custom name for global object.
   - `array`: transmit data in the array.
   - `false`: disable.
 
-- `params: undefined`<br>
+- **params**: undefined<br>
 Transmit session params during initialization.  
 To transmit session parameters at any other time, use the [Params method](#params)
 
-- `userParams: undefined`<br>
+- **userParams**: undefined<br>
 Transmit user params during initialization.  
 To transmit user parameters at any other time, use the [Params method](#params)
-
-
-## Init Strategy
 
 
 

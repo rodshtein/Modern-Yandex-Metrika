@@ -1,4 +1,4 @@
-import { optionsNormalize } from '../helpers';
+import {optionsNormalize} from '../helpers';
 
 test('send one metrika id. Return normalize object', () => {
   expect(optionsNormalize([1])).toEqual({
@@ -13,8 +13,8 @@ test('send one metrika id. Return normalize object', () => {
 test('send two metrika id. Return normalize object', () => {
   expect(optionsNormalize([1, 2])).toEqual({
     counters: {
-      1: { id: 1 },
-      2: { id: 2 }
+      1: {id: 1},
+      2: {id: 2}
     }
   });
 });
@@ -31,8 +31,8 @@ test('send two metrika id, one of this with additional options. Return normalize
     ])
   ).toEqual({
     counters: {
-      1: { id: 1 },
-      dev: { id: 2, webvisor: true, name: 'dev' }
+      1: {id: 1},
+      dev: {id: 2, webvisor: true}
     }
   });
 });
@@ -57,8 +57,8 @@ test('send init options, two metrika id, one of this with additional options. Re
     dev: true,
     delay: 3000,
     counters: {
-      1: { id: 1 },
-      dev: { id: 2, webvisor: true, name: 'dev' }
+      1: {id: 1},
+      dev: {id: 2, webvisor: true}
     }
   });
 });
