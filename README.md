@@ -70,47 +70,35 @@ Create `ym` function inside `<head>` tag of your main `html` template.
   In dev mode: 
   - All counters will be disabled.
   - JS Library will not be loaded.
-  But:
+  
+  But also:
   - All method will be works. 
   - Methods will show results in console without send any data.
   - You'll see all init and methods errors.
 - **counter**<br>
 - **delay**<br>
 ## Counter options
-Just pass counter id for default options:
-
 ```javascript
+Just pass counter id for default options:
 initMetrika(111222333);
 
 // Or more id's for several counters:
-
 initMetrika(111222333, 222333444);
 
 // Or even pass additional options:
 initMetrika(
   111222333,
-  { 
-    name: 'dev',
-    id: 222333444,
-    webvisor: true,
-  }
+  { name: 'dev', id: 222333444, webvisor: true }
 );
 
 // Or pass init options:
-initMetrika(
-  {
+initMetrika({
     delay: 3000,
     counters: [
       111111222,
-      {
-        disable: isDev(), 
-        name: 'dev',
-        id: 222333444,
-        webvisor: true,
-      }
+      { disable: isDev(),  name: 'dev', id: 222333444 }
     ]
-  }
-);
+  });
 ```
 
 ### Full list of available options
